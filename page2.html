@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Autocomplete 2</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="materialize.min.css">
+        <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
+        <script type="text/javascript" src="materialize.min.js"></script>
+    </head>
+    <body>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                ajaxAutoComplete({inputId: 'searchField', ajaxURL: 'http://www.gsmarena.com/search-json.php3?sSearch='});
+            });
+
+
+            function ajaxAutoComplete(options)
+            {
+                var $input = $("#" + options.inputId);
+
+                var $autocomplete = $('<ul id="ac" class="autocomplete-content dropdown-content"></ul>'),
+                        $inputDiv = $input.closest('.input-field'),
+                        request,
+                        runningRequest = false,
+                        timeout,
+                        liSelected;
+
+                if ($inputDiv.length) {
+                    $inputDiv.append($autocomplete); // Set ul in body
+                } else {
+                    $input.after($autocomplete);
+                }
+
+                var highlight = function (string, match) {
+                    var matchStart = string.toLowerCase().indexOf("" + match.toLowerCase() + ""),
+                            matchEnd = matchStart + match.length - 1,
+                            beforeMatch = string.slice(0, matchStart),
+                            matchText = string.slice(matchStart, matchEnd + 1),
+                            afterMatch = string.slice(matchEnd + 1);
+                    string = "<span>" + beforeMatch + "<span class='highlight'>" + matchText + "</span>" + afterMatch + "</span>";
+                    return string;
+
+                };
+
+                $autocomplete.on('click', 'li', function () {
+                    $input.val($(this).text().trim());
+                    $autocomplete.empty();
+                });
+
+                $input.on('keyup', function (e) {
+
+                    if (timeout) {
+                        clearTimeout(timeout);
+                    }
+
+                    if (runningRequest) {
+                        request.abort();
+                    }
+
+                    if (e.which === 13) {
+                        liSelected[0].getElementsByTagName('a')[0].click();
+                        return;
+                    }
+
+                    if (e.which === 40) {
+                        if (liSelected) {
+                            liSelected.removeClass('selected');
+                            next = liSelected.next();
+                            if (next.length > 0) {
+                                liSelected = next.addClass('selected');
+                            } else {
+                                liSelected = $autocomplete.find('li').eq(0).addClass('selected');
+                            }
+                        } else {
+                            liSelected = $autocomplete.find('li').eq(0).addClass('selected');
+                        }
+                        return; // stop new AJAX call
+                    } else if (e.which === 38) {
+                        if (liSelected) {
+                            liSelected.removeClass('selected');
+                            next = liSelected.prev();
+                            if (next.length > 0) {
+                                liSelected = next.addClass('selected');
+                            } else {
+                                liSelected = $autocomplete.find('li').last().addClass('selected');
+                            }
+                        } else {
+                            liSelected = $autocomplete.find('li').last().addClass('selected');
+                        }
+                        return;
+                    } else if (e.which === 9 ||
+                            e.which === 16 ||
+                            e.which === 17 ||
+                            e.which === 18 ||
+                            e.which === 20 ||
+                            e.which === 35 ||
+                            e.which === 36 ||
+                            e.which === 37 ||
+                            e.which === 39) {
+                        return;
+                    } else if (e.which === 27) { // Esc
+                        $autocomplete.empty();
+                        return;
+                    }
+
+
+
+                    var val = $input.val().toLowerCase();
+                    $autocomplete.empty();
+
+
+                    if (val.length > 2) {
+
+                        timeout = setTimeout(function () {
+
+                            runningRequest = true;
+
+                            request = $.ajax({
+                                type: 'GET',
+                                url: options.ajaxURL + val,
+                                success: function (data) {
+                                    if (!$.isEmptyObject(data)) {
+                                        var appendList = '';
+
+                                        for (var key in data) {
+
+                                            if (data.hasOwnProperty(key)) {
+                                                if (key === "news") {
+
+                                                    for (var news in data[key]) {
+
+                                                        var li = '';
+
+                                                        if (!!data[key]) {
+                                                            li += "<li><a href='" + "http://www.gsmarena.com/" + data[key][news].href + "'>";
+                                                            li += '<img src="' + data[key][news].src + '" class="left">';
+                                                            li += "<span>" + highlight(data[key][news].text, val) + "</span></a></li>";
+                                                        } else {
+                                                            li += '<li><span>' + key + '</span></li>';
+                                                        }
+
+                                                        appendList += li;
+                                                    }
+
+                                                }
+                                            }
+
+                                        }
+                                        $autocomplete.append(appendList);
+                                    }
+                                },
+                                complete: function () {
+                                    runningRequest = false;
+                                }
+                            });
+                        }, 250);
+                    }
+                });
+
+
+                $(document).click(function () {
+                    if (!$(event.target).closest($autocomplete).length) {
+                        $autocomplete.empty();
+
+                    }
+                });
+            }
+
+
+
+
+
+
+        </script>
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="card">
+                    <div class="card-content" style="padding: 10px 20px 10px 20px">
+                        <div class="row" style="margin-bottom: 12px">
+
+                            <div class="col s12 m6 offset-m3">
+                                <div class="input-field">
+                                    <input id="searchField" name="searchField" type="text" class="autocomplete" required placeholder="Search" autocomplete="off">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </body>
+</html>
