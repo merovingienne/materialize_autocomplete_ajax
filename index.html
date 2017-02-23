@@ -7,8 +7,17 @@
         <link rel="stylesheet" type="text/css" href="materialize.min.css">
         <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
         <script type="text/javascript" src="materialize.min.js"></script>
+
+        <style>
+            .top-row{padding-top: 3rem;}
+
+            .card .card-title{padding: 20px}
+
+            .material-icons {vertical-align: middle; line-height: inherit}
+        </style>
+
     </head>
-    <body>
+    <body class="grey lighten-4">
 
         <script type="text/javascript">
             $(document).ready(function () {
@@ -20,7 +29,7 @@
             {
                 var $input = $("#" + options.inputId);
 
-                var $autocomplete = $('<ul id="ac" class="autocomplete-content dropdown-content"></ul>'),
+                var $autocomplete = $('<ul id="ac" class="autocomplete-content dropdown-content" style="position:absolute"></ul>'),
                         $inputDiv = $input.closest('.input-field'),
                         request,
                         runningRequest = false,
@@ -134,7 +143,7 @@
                                                         var li = '';
 
                                                         if (!!data[key]) {
-                                                            li += "<li>"+"<img src='" + data[key][news].src + "' class='left circle'>";
+                                                            li += "<li>" + "<img src='" + data[key][news].src + "' class='left circle'>";
                                                             li += "<a href='" + "http://www.gsmarena.com/" + data[key][news].href + "'>";
                                                             li += "<span>" + highlight(data[key][news].text, val) + "</span></a></li>";
                                                         } else {
@@ -178,17 +187,39 @@
         <div class="container">
 
             <div class="row">
+                <h3 class="center-align" style="font-weight: 300">Materialize CSS Autocomplete with AJAX</h3>
+                <div class="col s12">
+                    <div class="card grey lighten-5">
+                        <div class="card-content">
+                            <div class="row" style="margin-bottom: 12px">
 
-                <div class="card">
-                    <div class="card-content" style="padding: 10px 20px 10px 20px">
-                        <div class="row" style="margin-bottom: 12px">
+                                <div class="col s12 m6 offset-m3">
+                                    <div class="input-field">
+                                        <input id="searchField" name="searchField" type="text" class="autocomplete" required placeholder="Search" autocomplete="off">
+                                    </div>
 
-                            <div class="col s12 m6 offset-m3">
-                                <div class="input-field">
-                                    <input id="searchField" name="searchField" type="text" class="autocomplete" required placeholder="Search" autocomplete="off">
                                 </div>
-
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m4">
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text" style="text-align: justify">
+                            <p>This is a demonstration on how to make an autocomplete dropdown that fetches data from a server as the user types. You can read the full article 
+                                <a href="http://blog.chanukawijayakoon.me/2016/11/materialize-css-autocomplete-with-ajax/">here.</a></p><br>
+                            <p>Here, the search box queries www.gsmarena.com for news articles as the user gives input. When the user stops typing,
+                            an AJAX request is made which fetches data from the servers and then they are presented in a drop-down.
+                            Note that in this case the drop-down list items have been made into links to the relevant news posts.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m8">
+                    <div class="card">
+                        <div class="card-title blue  white-text z-depth-2">Code</div>
+                        <div class="card-content">
+                            <script src="http://gist-it.appspot.com/https://github.com/merovingienne/materialize_autocomplete_ajax/blob/master/index.html"></script>
                         </div>
                     </div>
                 </div>
