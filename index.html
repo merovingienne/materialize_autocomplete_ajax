@@ -25,8 +25,7 @@
             });
 
 
-            function ajaxAutoComplete(options)
-            {
+            function ajaxAutoComplete(options) {
                 var $input = $("#" + options.inputId);
 
                 var $autocomplete = $('<ul id="ac" class="autocomplete-content dropdown-content" style="position:absolute"></ul>'),
@@ -60,7 +59,7 @@
 
                 $input.on('keyup', function (e) {
 
-                    if (timeout) {
+                    if (timeout) {  // comment to remove timeout 
                         clearTimeout(timeout);
                     }
 
@@ -68,12 +67,12 @@
                         request.abort();
                     }
 
-                    if (e.which === 13) {
+                    if (e.which === 13) {   // select element
                         liSelected[0].getElementsByTagName('a')[0].click();
                         return;
                     }
 
-                    if (e.which === 40) {
+                    if (e.which === 40) {   // down arrow
                         if (liSelected) {
                             liSelected.removeClass('selected');
                             next = liSelected.next();
@@ -86,7 +85,7 @@
                             liSelected = $autocomplete.find('li').eq(0).addClass('selected');
                         }
                         return; // stop new AJAX call
-                    } else if (e.which === 38) {
+                    } else if (e.which === 38) {    // up arrow
                         if (liSelected) {
                             liSelected.removeClass('selected');
                             next = liSelected.prev();
@@ -99,17 +98,20 @@
                             liSelected = $autocomplete.find('li').last().addClass('selected');
                         }
                         return;
-                    } else if (e.which === 9 ||
-                            e.which === 16 ||
-                            e.which === 17 ||
-                            e.which === 18 ||
-                            e.which === 20 ||
-                            e.which === 35 ||
-                            e.which === 36 ||
-                            e.which === 37 ||
-                            e.which === 39) {
+                    }
+
+                    // escape these keys
+                    if (e.which === 9 || // tab
+                            e.which === 16 || // shift
+                            e.which === 17 || // ctrl
+                            e.which === 18 || // alt
+                            e.which === 20 || // caps lock
+                            e.which === 35 || // end
+                            e.which === 36 || // home
+                            e.which === 37 || // left arrow
+                            e.which === 39) {       // right arrow
                         return;
-                    } else if (e.which === 27) { // Esc
+                    } else if (e.which === 27) { // Esc. Close ul
                         $autocomplete.empty();
                         return;
                     }
@@ -122,26 +124,19 @@
 
                     if (val.length > 2) {
 
-                        timeout = setTimeout(function () {
-
+                        timeout = setTimeout(function () { // comment this line to remove timeout
                             runningRequest = true;
-
                             request = $.ajax({
                                 type: 'GET',
                                 url: options.ajaxURL + val,
                                 success: function (data) {
                                     if (!$.isEmptyObject(data)) {
                                         var appendList = '';
-
                                         for (var key in data) {
-
                                             if (data.hasOwnProperty(key)) {
-                                                if (key === "news") {
-
+                                                if (key === "news") {   // only reading news
                                                     for (var news in data[key]) {
-
                                                         var li = '';
-
                                                         if (!!data[key]) {
                                                             li += "<li>" + "<img src='" + data[key][news].src + "' class='left circle'>";
                                                             li += "<a href='" + "http://www.gsmarena.com/" + data[key][news].href + "'>";
@@ -149,7 +144,6 @@
                                                         } else {
                                                             li += '<li><span>' + key + '</span></li>';
                                                         }
-
                                                         appendList += li;
                                                     }
 
@@ -164,10 +158,9 @@
                                     runningRequest = false;
                                 }
                             });
-                        }, 250);
+                        }, 250);    // comment this line to remove timeout
                     }
                 });
-
 
                 $(document).click(function () {
                     if (!$(event.target).closest($autocomplete).length) {
@@ -176,12 +169,6 @@
                     }
                 });
             }
-
-
-
-
-
-
         </script>
 
         <div class="container">
@@ -210,8 +197,8 @@
                             <p>This is a demonstration on how to make an autocomplete dropdown that fetches data from a server as the user types. You can read the full article 
                                 <a href="http://blog.chanukawijayakoon.me/2016/11/materialize-css-autocomplete-with-ajax/">here.</a></p><br>
                             <p>Here, the search box queries www.gsmarena.com for news articles as the user gives input. When the user stops typing,
-                            an AJAX request is made which fetches data from the servers and then they are presented in a drop-down.
-                            Note that in this case the drop-down list items have been made into links to the relevant news posts.</p>
+                                an AJAX request is made which fetches data from the servers and then they are presented in a drop-down.
+                                Note that in this case the drop-down list items have been made into links to the relevant news posts.</p>
                         </div>
                     </div>
                 </div>
@@ -219,15 +206,11 @@
                     <div class="card">
                         <div class="card-title blue  white-text z-depth-2">Code</div>
                         <div class="card-content">
-                            <script src="http://gist-it.appspot.com/https://github.com/merovingienne/materialize_autocomplete_ajax/blob/master/index.html"></script>
+                            <script src="https://gist.github.com/merovingienne/2b034e0a7b26d9a82ab2f92c58c83738.js"></script>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-
     </body>
 </html>
