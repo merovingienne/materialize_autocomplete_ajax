@@ -24,7 +24,7 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
-                ajaxAutoComplete({inputId: 'searchField', ajaxURL: 'http://www.gsmarena.com/search-json.php3?sSearch='});
+                ajaxAutoComplete({inputId: 'searchField', ajaxURL: 'https://www.forbes.com/typeahead/search?term='});
             });
 
 
@@ -135,22 +135,21 @@
                                 success: function (data) {
                                     if (!$.isEmptyObject(data)) {
                                         var appendList = '';
-                                        for (var key in data) {
-                                            if (data.hasOwnProperty(key)) {
-                                                if (key === "news") {   // only reading news
-                                                    for (var news in data[key]) {
+                                        for (var result in data) {
+                                            console.log(result);
+                                            if (data.hasOwnProperty(result)) {
+                                                    for (var item in data[result]) {
                                                         var li = '';
-                                                        if (!!data[key]) {
-                                                            li += "<li>" + "<img src='" + data[key][news].src + "' class='left circle'>";
-                                                            li += "<a href='" + "http://www.gsmarena.com/" + data[key][news].href + "'>";
-                                                            li += "<span>" + highlight(data[key][news].text, val) + "</span></a></li>";
+                                                        if (!!data[result]) {
+                                                            li += "<li>" + "<img src='" + data[result].image + "' class='left circle'>";
+                                                            li += "<a href='" + data[result].url + "'>";
+                                                            li += "<span>" + highlight(data[result].label, val) + "</span></a></li>";
                                                         } else {
                                                             li += '<li><span>' + key + '</span></li>';
                                                         }
                                                         appendList += li;
                                                     }
 
-                                                }
                                             }
 
                                         }
