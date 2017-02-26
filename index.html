@@ -132,6 +132,9 @@
                             request = $.ajax({
                                 type: 'GET',
                                 url: options.ajaxURL + val,
+                                headers: {
+                                    "Access-Control-Allow-Origin": "*"
+                                }
                                 success: function (data) {
                                     if (!$.isEmptyObject(data)) {
                                         var appendList = '';
