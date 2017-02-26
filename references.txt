@@ -1,0 +1,3 @@
+http://www.learningjquery.com/2009/03/43439-reasons-to-use-append-correctly
+https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
+http://api.jquery.com/on/
