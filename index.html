@@ -112,7 +112,8 @@
                             e.which === 35 || // end
                             e.which === 36 || // home
                             e.which === 37 || // left arrow
-                            e.which === 39) {       // right arrow
+                            e.which === 39 || // right arrow
+                            e.which === 44 ) {// print screen       
                         return;
                     } else if (e.which === 27) { // Esc. Close ul
                         $autocomplete.empty();
